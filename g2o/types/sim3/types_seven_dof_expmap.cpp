@@ -171,6 +171,42 @@ namespace g2o {
     return os.good();
   }
 
+  /**InverseSim3ProjectXYZ*/
+
+    EdgeInverseSim3ProjectXYZ::EdgeInverseSim3ProjectXYZ() :
+    BaseBinaryEdge<2, Vector2D, VertexSBAPointXYZ, VertexSim3Expmap>()
+    {
+    }
+
+    bool EdgeInverseSim3ProjectXYZ::read(std::istream& is)
+    {
+      for (int i=0; i<2; i++)
+      {
+        is >> _measurement[i];
+      }
+
+      for (int i=0; i<2; i++)
+        for (int j=i; j<2; j++) {
+    is >> information()(i,j);
+        if (i!=j)
+          information()(j,i)=information()(i,j);
+      }
+      return true;
+    }
+
+    bool EdgeInverseSim3ProjectXYZ::write(std::ostream& os) const
+    {
+      for (int i=0; i<2; i++){
+        os  << _measurement[i] << " ";
+      }
+
+      for (int i=0; i<2; i++)
+        for (int j=i; j<2; j++){
+    os << " " <<  information()(i,j);
+      }
+      return os.good();
+    }
+
 //  void EdgeSim3ProjectXYZ::linearizeOplus()
 //  {
 //    VertexSim3Expmap * vj = static_cast<VertexSim3Expmap *>(_vertices[1]);
