@@ -24,6 +24,10 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Modified by Raúl Mur Artal (2014)
+// - Added EdgeInverseSim3ProjectXYZ
+// - Modified VertexSim3Expmap to represent relative transformation between two cameras. Includes calibration of both cameras.
+
 #ifndef G2O_SEVEN_DOF_EXPMAP_TYPES
 #define G2O_SEVEN_DOF_EXPMAP_TYPES
 
@@ -71,6 +75,25 @@ namespace g2o {
       Vector2D res;
       res[0] = v[0]*_focal_length[0] + _principle_point[0];
       res[1] = v[1]*_focal_length[1] + _principle_point[1];
+      return res;
+    }
+
+    Vector2D _principle_point1, _principle_point2;
+    Vector2D _focal_length1, _focal_length2;
+
+    Vector2D cam_map1(const Vector2D & v) const
+    {
+      Vector2D res;
+      res[0] = v[0]*_focal_length1[0] + _principle_point1[0];
+      res[1] = v[1]*_focal_length1[1] + _principle_point1[1];
+      return res;
+    }
+
+    Vector2D cam_map2(const Vector2D & v) const
+    {
+      Vector2D res;
+      res[0] = v[0]*_focal_length2[0] + _principle_point2[0];
+      res[1] = v[1]*_focal_length2[1] + _principle_point2[1];
       return res;
     }
 
@@ -129,6 +152,28 @@ class EdgeSim3ProjectXYZ : public  BaseBinaryEdge<2, Vector2D,  VertexSBAPointXY
 
       Vector2D obs(_measurement);
       _error = obs-v1->cam_map(project(v1->estimate().map(v2->estimate())));
+    }
+
+   // virtual void linearizeOplus();
+
+};
+
+/**/
+class EdgeInverseSim3ProjectXYZ : public  BaseBinaryEdge<2, Vector2D,  VertexSBAPointXYZ, VertexSim3Expmap>
+{
+  public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    EdgeInverseSim3ProjectXYZ();
+    virtual bool read(std::istream& is);
+    virtual bool write(std::ostream& os) const;
+
+    void computeError()
+    {
+      const VertexSim3Expmap* v1 = static_cast<const VertexSim3Expmap*>(_vertices[1]);
+      const VertexSBAPointXYZ* v2 = static_cast<const VertexSBAPointXYZ*>(_vertices[0]);
+
+      Vector2D obs(_measurement);
+      _error = obs-v1->cam_map2(project(v1->estimate().inverse().map(v2->estimate())));
     }
 
    // virtual void linearizeOplus();
