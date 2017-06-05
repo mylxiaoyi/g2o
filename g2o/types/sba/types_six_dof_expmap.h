@@ -24,9 +24,9 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Modified by Ra√∫l Mur Artal (2014)
+// Modified by Ra®≤l Mur Artal (2014)
 // Added EdgeSE3ProjectXYZ (project using focal_length in x,y directions)
-// Modified by Ra√∫l Mur Artal (2016)
+// Modified by Ra®≤l Mur Artal (2016)
 // Added EdgeStereoSE3ProjectXYZ (project using focal_length in x,y directions)
 // Added EdgeSE3ProjectXYZOnlyPose (unary edge to optimize only the camera pose)
 // Added EdgeStereoSE3ProjectXYZOnlyPose (unary edge to optimize only the camera

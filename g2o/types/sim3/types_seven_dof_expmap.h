@@ -24,7 +24,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// Modified by Ra√∫l Mur Artal (2014)
+// Modified by Ra®≤l Mur Artal (2014)
 // - Added EdgeInverseSim3ProjectXYZ
 // - Modified VertexSim3Expmap to represent relative transformation between two cameras. Includes calibration of both cameras.
 
@@ -35,6 +35,7 @@
 #include "g2o/core/base_binary_edge.h"
 #include "g2o/types/sba/types_six_dof_expmap.h"
 #include "sim3.h"
+#include "g2o_types_sim3_api.h"
 
 namespace g2o {
 
