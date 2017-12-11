@@ -181,6 +181,28 @@ class EdgeInverseSim3ProjectXYZ : public  BaseBinaryEdge<2, Vector2D,  VertexSBA
 
 };
 
+/**/
+class G2O_TYPES_SIM3_API EdgeSim3ProjectXYZGPS : public  BaseBinaryEdge<3, Vector3D, VertexSBAPointXYZ, VertexSim3Expmap>
+{
+public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+    EdgeSim3ProjectXYZGPS();
+    virtual bool read(std::istream& is);
+    virtual bool write(std::ostream& os) const;
+
+    void computeError()
+    {
+        const VertexSim3Expmap* v1 = static_cast<const VertexSim3Expmap*>(_vertices[1]);
+        const VertexSBAPointXYZ* v2 = static_cast<const VertexSBAPointXYZ*>(_vertices[0]);
+
+	Vector3D obs(_measurement);
+	_error = obs - v1->estimate().map(v2->estimate());
+    }
+
+    // virtual void linearizeOplus();
+};
+
+
 } // end namespace
 
 #endif

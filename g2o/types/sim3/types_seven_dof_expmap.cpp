@@ -249,5 +249,38 @@ namespace g2o {
 //    _jacobianOplusXj(1,5) = y/z_2 *_focal_length(1);
 //    _jacobianOplusXj(1,6) = 0; // scale is ignored
 //  }
+    EdgeSim3ProjectXYZGPS::EdgeSim3ProjectXYZGPS()
+      : BaseBinaryEdge<3, Vector3D, VertexSBAPointXYZ, VertexSim3Expmap>()
+    {
+    }
+
+    bool EdgeSim3ProjectXYZGPS::read(std::istream &is)
+    {
+      for (int i=0; i<3; i++)
+      {
+        is >> _measurement[i];
+      }
+
+      for (int i=0; i<3; i++)
+        for (int j=i; j<3; j++) {
+          is >> information()(i,j);
+          if (i!=j)
+            information()(j,i)=information()(i,j);
+      }
+      return true;
+    }
+
+    bool EdgeSim3ProjectXYZGPS::write(std::ostream &os) const
+    {
+      for (int i=0; i<2; i++){
+        os  << _measurement[i] << " ";
+      }
+
+      for (int i=0; i<2; i++)
+        for (int j=i; j<2; j++){
+          os << " " <<  information()(i,j);
+      }
+      return os.good();
+    }
 
 } // end namespace
