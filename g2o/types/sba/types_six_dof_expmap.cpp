@@ -828,4 +828,41 @@ void EdgeICPSE3ProjectXYZOnlyPose::linearizeOplus ()
     _jacobianOplusXi (2, 5) = -R (0, 2) * y + R (1, 2) * x;
 }
 
+bool EdgeGPSSE3ProjectOnlyPose::read (istream& is)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        is >> _measurement[i];
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = i; j < 3; j++)
+        {
+            is >> information ()(i, j);
+            if (i != j) information ()(j, i) = information ()(i, j);
+        }
+    }
+
+    return true;
+}
+
+bool EdgeGPSSE3ProjectOnlyPose::write (ostream& os) const
+{
+    for (int i = 0; i < 3; i++)
+    {
+        os << measurement ()[i] << " ";
+    }
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = i; j < 3; j++)
+        {
+            os << " " << information ()(i, j);
+        }
+    }
+
+    return os.good ();
+}
+
 } // end namespace

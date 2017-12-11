@@ -399,6 +399,28 @@ public:
     Vector3D Xw;
 };
 
+class G2O_TYPES_SBA_API EdgeGPSSE3ProjectOnlyPose : public BaseUnaryEdge<3, Vector3D, VertexSE3Expmap>
+{
+public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
+	EdgeGPSSE3ProjectOnlyPose()
+	{
+		
+	}
+
+	bool read(std::istream& is);
+	bool write(std::ostream& os) const;
+
+	void computeError()
+	{
+		const VertexSE3Expmap* v1 = static_cast<const VertexSE3Expmap*> (_vertices[0]);
+		Vector3D obs(_measurement);
+		_error = obs - v1->estimate().inverse().translation();
+	}
+};
+
+
 } // end namespace
 
 #endif
